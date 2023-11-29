@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const mongoose = require ('mongoose');
+const User = require('../models/users');
 
 const {
   requireAuth,
@@ -20,6 +22,25 @@ const initAdminUser = (app, next) => {
     password: bcrypt.hashSync(adminPassword, 10),
     roles: { admin: true },
   };
+
+  getUsers()
+  .then(users => {
+    // console.log('Todas las personas:', users);
+    const existsUser = users.some(user =>user.email === adminUser.email);
+    if (!existsUser){
+      const newAdminUser = new User(adminUser);
+      return newAdminUser.save();
+    }
+    console.error('El usuario ya existe en la base de datos')
+  })
+  .catch(error => {
+    // Maneja el error si ocurrió durante la búsqueda
+    console.error('Error general:', error);
+  })
+  // .finally(() => {
+    // Cierra la conexión a la base de datos después de la consulta
+    // mongoose.connection.close();
+  // });
 
   // TODO: Create admin user
   // First, check if adminUser already exists in the database

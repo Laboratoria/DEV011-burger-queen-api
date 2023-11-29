@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // ---------- Define schema a of orders ---------- //
-const productsOdersSchema = new Schema({
+const productsOrdersSchema = new Schema({
   qty: Number, // Cantidad
   product: {
     productId: {type:Schema.Types.ObjectId, ref: 'products'},
@@ -10,14 +10,14 @@ const productsOdersSchema = new Schema({
     price: Number,
     image: String, // URL a la imagen
     type: String, // Tipo/Categoría
-    dateEntry: String // Fecha de creación
+    dateEntry: Date // Fecha de creación
   }
 });
-const ProductOder = mongoose.model('ProductOder', productsOdersSchema);
+const ProductOrder = mongoose.model('ProductOrder', productsOrdersSchema);
 
 mongoose.connect('mongodb://127.0.0.1:27017/test');
 
-module.exports = Schema;
+module.exports = ProductOrder;
 
 
 // Connect to MongoDB

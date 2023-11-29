@@ -7,7 +7,7 @@ const productsSchema = new Schema({
   price: Number,
   image: String, // URL a la imagen
   type: String, // Tipo/Categoría
-  dateEntry: String // Fecha de creación
+  dateEntry: Date // Fecha de creación
 });
 const Product = mongoose.model('Product', productsSchema);
 

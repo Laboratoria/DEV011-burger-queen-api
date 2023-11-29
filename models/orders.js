@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 // ---------- Define schema a of orders ---------- //
-const odersSchema = new Schema({
+const ordersSchema = new Schema({
   userId:{type:Schema.Types.ObjectId, ref:'users', required:true}, // Id
   client:String, // Clienta para quien se creó la orden
   products:[
@@ -19,10 +19,10 @@ const odersSchema = new Schema({
     }
   ], // 
   status:{type:Schema.Types.ObjectId, ref:'statuses'}, // Estado de la orden [ pending, canceled, delivering, delivered ]
-  dateEntry:String, // Fecha de creación
-  dateProcessed:String // Fecha de cambio de `status` a `delivered`
+  dateEntry:Date, // Fecha de creación
+  dateProcessed:Date // Fecha de cambio de `status` a `delivered`
 });
-const Order = mongoose.model('Order', odersSchema);
+const Order = mongoose.model('Order', ordersSchema);
 
 mongoose.connect('mongodb://127.0.0.1:27017/test');
 
