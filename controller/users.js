@@ -1,7 +1,7 @@
 const mongoose = require ('mongoose');
 const User = require('../models/users');
 
-mongoose.connect('mongodb://127.0.0.1:27017/test');
+mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 module.exports = {
   getUsers: async(req, resp, next) => {

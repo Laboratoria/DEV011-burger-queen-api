@@ -30,8 +30,9 @@ const initAdminUser = (app, next) => {
     if (!existsUser){
       const newAdminUser = new User(adminUser);
       return newAdminUser.save();
+    } else {
+    console.error(`El usuario ${adminUser.email} ya existe en la base de datos`)
     }
-    console.error('El usuario ya existe en la base de datos')
   })
   .catch(error => {
     // Maneja el error si ocurrió durante la búsqueda
@@ -48,6 +49,8 @@ const initAdminUser = (app, next) => {
 
   next();
 };
+
+mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 /*
  * Español:

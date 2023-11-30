@@ -24,7 +24,7 @@ const ordersSchema = new Schema({
 });
 const Order = mongoose.model('Order', ordersSchema);
 
-mongoose.connect('mongodb://127.0.0.1:27017/test');
+mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 module.exports = Order;
 
