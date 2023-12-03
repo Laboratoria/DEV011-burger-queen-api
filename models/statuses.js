@@ -30,7 +30,7 @@ Promise.all(
     console.error('Error al guardar status en MongoDB:', error);
   });
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+// mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 
 // Connect to MongoDB

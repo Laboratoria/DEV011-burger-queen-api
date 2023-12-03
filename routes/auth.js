@@ -8,15 +8,15 @@ const { getUsers } = require('../controller/users');
 mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', () => {
-    console.log('Database connected');
+    console.log('r/a-Database connected');
 });
 
 const { secret } = config;
 
-module.exports = async(app, nextMain) => {
-  console.log('async app');
+module.exports = (app, nextMain) => {
+  console.log('r/a-async app');
   app.post('/login', (req, resp, next) => {
-    console.log('async app.post');
+    console.log('r/a-async app.post');
 
     const { email, password } = req.body;
     
@@ -31,9 +31,9 @@ module.exports = async(app, nextMain) => {
     // If they match, send an access token created with JWT
     
     getUsers()
-    .then( async(users) => {
+    .then((users) => {
       // Extraemos el posible usuario existente
-      console.log('useres auth:',users);
+      console.log('r/a-users auth:',users);
       const existingUser = users.filter(user => user.email === email);
       // Validamos que la contraseña hasheada sea la misma que la guardada
       if (existingUser.length != 0){
@@ -42,26 +42,26 @@ module.exports = async(app, nextMain) => {
           
           // en caso de error
           if (result) {
-            console.log('result:',result);
+            console.log('r/a-compare_result:',result);
             // si las credenciales coinciden, se genera y envia el token JWT
-            const token = jwt.sign({ userId: existingUser[0]._id }, secret, { expiresIn: '1h' });
+            const token = jwt.sign({ uid: existingUser[0]._id, email:existingUser[0].email }, secret, { expiresIn: '1h' });
+            console.log('r/a-token:',jwt.verify(token, secret));
             // enviamos la rspuesta del token
             resp.json({ token });
           }else if (err) {
-            console.log('err: ',err);
+            console.log('r/a-err: ',err);
             // enviamos al respuesta 500 de error con el servidor
             return next(500);
-            
           }})
         } else {
           // si la contraseña es incorrecta enviamos una respuesta de status 401
           return next(401);
         }
-  })
+    })
     .catch((error) => {
       // si no se logra resolver la promesa de traer la coleción de los usuarios
       // enviamos al respuesta 500 de error con el servidor
-      console.log('error 500 con el servidor')
+      console.log('r/a:error 500 con el servidor')
       return next(500);
     })
 

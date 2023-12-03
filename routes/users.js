@@ -50,7 +50,7 @@ const initAdminUser = (app, next) => {
   next();
 };
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+// mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 /*
  * Español:
@@ -108,10 +108,19 @@ mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
  */
 
 module.exports = (app, next) => {
+  app.use('/user/:test', function(req, res, next) {
+    console.log('Test-Request URL:', req.originalUrl);
+    next();
+  }, function (req, res, next) {
+    console.log('Test-Request Type:', req.method);
+    next();
+  });
 
   app.get('/users', requireAdmin, getUsers);
 
-  app.get('/users/:uid', requireAuth, (req, resp) => {
+  app.get('/users/:uid', requireAuth, async(req, resp) => {
+    resp.json({maya:'await getUsers()'})
+    /* next() */
   });
 
   app.post('/users', requireAdmin, (req, resp, next) => {

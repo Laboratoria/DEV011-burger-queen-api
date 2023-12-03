@@ -1,10 +1,10 @@
 const mongoose = require ('mongoose');
 const User = require('../models/users');
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+// mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 module.exports = {
-  getUsers: async(req, resp, next) => {
+  getUsers: async() => {
     try {
       const allUsers = await User.find();
       // console.log('Usuarios de la collección: ',allUsers);
@@ -13,7 +13,6 @@ module.exports = {
       console.error('Error al buscar todas las personas:', error);
       throw error;
     }
-
     // TODO: Implement the necessary function to fetch the `users` collection or table
   },
 };

@@ -14,7 +14,7 @@ module.exports = (app, nextMain) => {
       res.render('visualizar', { status });
     } catch (error) {
       console.error('Error al obtener status:', error);
-      res.status(500).send('Error interno del servidor');
+      res.status(500).send('Error interno del servidor (route/statuses)');
     }
   });
 

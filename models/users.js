@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const usersSchema = new Schema({
   email:{type:String, unique:true},
   password:String,
-  role:String, // Rol asignado [ admin, waiter, chef ]
+  roles:{}, // Rol asignado [ admin, waiter, chef ]
 });
 const User = mongoose.model('User', usersSchema);
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+// mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 module.exports = User;
 
