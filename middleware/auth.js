@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { getUsers } = require('../controller/users');
 
+
+
 module.exports = (secret) => (req, resp, next) => {
   const { authorization } = req.headers;
   console.log ('m/a-authorization: ', authorization);
@@ -18,6 +20,7 @@ module.exports = (secret) => (req, resp, next) => {
 
   jwt.verify(token, secret, (err, decodedToken) => {
     if (err) {
+      console.log('m/a-verifiTokenError:', err);
       return next({ status: 403, message: 'Token inválido' });
     }
     console.log('m/a-decodedToken:',decodedToken);
@@ -36,12 +39,13 @@ module.exports.isAuthenticated = (req) => (
   !!req.uid
 );
 
-module.exports.isAdmin = async (req) => {
+const allUsersDB = getUsers().then(usr => usr);
+module.exports.isAdmin = async (req,allUsers = allUsersDB) => {
   try {
-    const allUsers = await getUsers();
-    const user = allUsers.find(u => u._id.toString() === req.uid);
-    console.log('m/a-isAdmin: ', user.roles.admin);
-    return user && user.roles && user.roles.admin;
+    console.log('m/a-isAdmin allUsers: ', allUsers);
+    const user = allUsers.filter((user) => (user._id.toString() === req.uid))
+    console.log('m/a-isAdmin: ', user && user.roles && user.roles.admin === true);
+    return (user && user.roles && user.roles.admin === true);
   } catch (error) {
     console.error('Error al verificar si el usuario es administrador:', error);
     throw error;
@@ -51,15 +55,18 @@ module.exports.isAdmin = async (req) => {
 
 module.exports.requireAuth = (req, resp, next) => (
   (!module.exports.isAuthenticated(req))
-    ? next({ status: 401, message: 'isAuthenticated(1) false' })
+    ? resp.status(401).json({"error": "isAuthenticated(1):false"})
+    // ? next({ status: 401, message: 'isAuthenticated(1) false' })
     : next()
 );
 
-module.exports.requireAdmin = (req, resp, next) => (
+module.exports.requireAdmin = async (req, resp, next) => (
   // eslint-disable-next-line no-nested-ternary
   (!module.exports.isAuthenticated(req))
-    ? next({ status: 401, message: 'isAuthenticated(2) false' })
-    : (!module.exports.isAdmin(req))
-      ? next({ status: 401, message: 'isAdmin false' })
+    ? resp.status(401).json({"error": "isAuthenticated(2):false"})
+    // ? next({ status: 401, message: 'isAuthenticated(2) false' })
+    : (module.exports.isAdmin(req) != true)
+      ? resp.status(403).json({"error": "isAdmin:false"})
       : next()
+      // ? next({ status: 401, message: 'isAdmin false' })
 );

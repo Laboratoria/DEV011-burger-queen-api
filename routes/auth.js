@@ -44,7 +44,7 @@ module.exports = (app, nextMain) => {
           if (result) {
             console.log('r/a-compare_result:',result);
             // si las credenciales coinciden, se genera y envia el token JWT
-            const token = jwt.sign({ uid: existingUser[0]._id, email:existingUser[0].email }, secret, { expiresIn: '1h' });
+            const token = jwt.sign({ uid: existingUser[0]._id, email:existingUser[0].email }, secret, { expiresIn: '4h' });
             console.log('r/a-token:',jwt.verify(token, secret));
             // enviamos la rspuesta del token
             resp.json({ token });

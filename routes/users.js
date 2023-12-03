@@ -5,6 +5,7 @@ const User = require('../models/users');
 const {
   requireAuth,
   requireAdmin,
+  isAdmin,
 } = require('../middleware/auth');
 
 const {
@@ -28,8 +29,8 @@ const initAdminUser = (app, next) => {
     // console.log('Todas las personas:', users);
     const existsUser = users.some(user =>user.email === adminUser.email);
     if (!existsUser){
-      const newAdminUser = new User(adminUser);
-      return newAdminUser.save();
+      const newAdminUserDB = new User(adminUser);
+      return newAdminUserDB.save();
     } else {
     console.error(`El usuario ${adminUser.email} ya existe en la base de datos`)
     }
@@ -116,15 +117,87 @@ module.exports = (app, next) => {
     next();
   });
 
-  app.get('/users', requireAdmin, getUsers);
-
-  app.get('/users/:uid', requireAuth, async(req, resp) => {
-    resp.json({maya:'await getUsers()'})
+  app.get('/users', requireAdmin, async(req, resp) => {
+    if (await requireAdmin(req)){
+    let allUsers = await getUsers();
+    const respUsersGet = [];
+    
+    allUsers.map((user)=>{
+      respUsersGet.push({
+        id:user._id,
+        email:user.email,
+        role:user.roles
+      })
+    })
+    resp.json(respUsersGet)
+  } else {
+    resp.status(403).json({"error": "No tiene permiso de Administradora"});
+  }
     /* next() */
   });
 
-  app.post('/users', requireAdmin, (req, resp, next) => {
+  app.get('/users/:uid', requireAuth, async(req, resp) => {
+    console.log('r/u get/:uid params: ',req.params.uid);
+    const uidUser = req.params.uid;
+    let allUsers = await getUsers();
+    const user = allUsers.filter((user) => (user._id.toString() === uidUser));
+    console.log('r/u get/:uid user:',user);
+    if ( user.length === 0 ){
+      resp.status(404).json({"error": "La usuaria solicitada no existe"});
+    } else if ( isAdmin(req) === true || req.uid === uidUser){
+      resp.json({
+        id:user[0]._id,
+        email:user[0].email,
+        role:user[0].roles
+      });
+    } else {
+      resp.status(403).json({"error": "No tiene permiso de Administradora"});
+    }
+
+    /* next() */
+  });
+
+  app.post('/users', requireAdmin, async(req, resp, next) => {
     // TODO: Implement the route to add new users
+    const newUser = req.body; // Acceder a los datos en el cuerpo de la solicitud
+    console.log('r/u post req.body: ',newUser);
+    if (!newUser.email || !newUser.password || !newUser.roles) {
+      resp.status(400).json({"error": "Falta información"});
+    }
+  
+    const newUserCrypted = {
+      email: newUser.email,
+      password: bcrypt.hashSync(newUser.password, 10),
+      roles: newUser.roles,
+    };
+  
+    getUsers()
+    .then(users => {
+      // console.log('Todas las personas:', users);
+      const existsUser = users.some(user =>user.email === newUserCrypted.email);
+      if (!existsUser){
+        const newUserDB = new User(newUserCrypted);
+        console.log('r/u post newUserDB: ',newUserDB);
+        try{
+          newUserDB.save();
+          console.log('r/u post req.body: ',newUserDB);
+          resp.json({'id':newUserDB._id, 'email':newUserDB.email,'role':newUserDB.roles});
+        } catch (err){
+          console.log('r/u post error:',err);
+          resp.status(500).json({'message':'Error interno del servidor, no se pudo guardar el usuario'})
+        }
+      } else {
+        resp.status(403).json({"error": "Email ya registrado"});
+        //return next({status:403, message:'Email ya registrado'});
+      }
+    })
+    .catch(error => {
+      // Maneja el error si ocurrió durante la búsqueda
+      console.error('Error general:', error);
+      next({status:500, message:'Error interno del servidor, no se pudo guardar el usuario'})
+    })
+
+    
   });
 
   app.put('/users/:uid', requireAuth, (req, resp, next) => {
