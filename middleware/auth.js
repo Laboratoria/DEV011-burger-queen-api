@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { getUsers } = require('../controller/users');
+// const { getUsers } = require('../controller/users');
 
 
 
@@ -27,8 +27,10 @@ module.exports = (secret) => (req, resp, next) => {
     console.log('m/a-decodedToken.iud:',decodedToken.uid);
 
     req.uid = decodedToken.uid;
+    req.admin = decodedToken.admin === undefined ? false:decodedToken.admin;
+
     console.log ('m/a-req.uid: ', req.uid);
-    console.log('m/a-isAuthenticated',!!req.uid);
+    console.log ('m/a-req.admin: ', req.admin);
     next()
     // TODO: Verify user identity using `decodeToken.uid`
   });
@@ -39,9 +41,10 @@ module.exports.isAuthenticated = (req) => (
   !!req.uid
 );
 
-const allUsersDB = getUsers().then(usr => usr);
-module.exports.isAdmin = async (req,allUsers = allUsersDB) => {
-  try {
+module.exports.isAdmin = (req) => (
+  !!req.admin
+  /* try {
+    const allUsers = await getUsers();
     console.log('m/a-isAdmin allUsers: ', allUsers);
     const user = allUsers.filter((user) => (user._id.toString() === req.uid))
     console.log('m/a-isAdmin: ', user && user.roles && user.roles.admin === true);
@@ -49,24 +52,35 @@ module.exports.isAdmin = async (req,allUsers = allUsersDB) => {
   } catch (error) {
     console.error('Error al verificar si el usuario es administrador:', error);
     throw error;
-  }
+  } */
   // TODO: Decide based on the request information whether the user is an admin
-}
+)
 
-module.exports.requireAuth = (req, resp, next) => (
-  (!module.exports.isAuthenticated(req))
-    ? resp.status(401).json({"error": "isAuthenticated(1):false"})
-    // ? next({ status: 401, message: 'isAuthenticated(1) false' })
-    : next()
-);
+module.exports.requireAuth = (req, resp, next) => {
+  const isNotAuth = !module.exports.isAuthenticated(req);
+  console.log('m/a-requireAdmin: ',!isNotAuth);
+  if (isNotAuth){
+    resp.status(401).json({"error": "isAuthenticated(1):false"})
+  } else {
+    next()
+  }
+};
 
-module.exports.requireAdmin = async (req, resp, next) => (
+module.exports.requireAdmin = (req, resp, next) => {
   // eslint-disable-next-line no-nested-ternary
-  (!module.exports.isAuthenticated(req))
-    ? resp.status(401).json({"error": "isAuthenticated(2):false"})
-    // ? next({ status: 401, message: 'isAuthenticated(2) false' })
-    : (module.exports.isAdmin(req) != true)
-      ? resp.status(403).json({"error": "isAdmin:false"})
-      : next()
-      // ? next({ status: 401, message: 'isAdmin false' })
-);
+  const isNotAuth = !module.exports.isAuthenticated(req);
+  const isNotAdmin = !module.exports.isAdmin(req);
+
+  console.log('m/a-requireAdmin: ', !isNotAuth, !isNotAdmin);
+
+  if (isNotAuth) {
+    return resp.status(401).json({ "error": "isAuthenticated(2):false" });
+  }
+
+  if (isNotAdmin) {
+    return resp.status(403).json({ "error": "La usuaria no es administradora" });
+  }
+
+  // Solo llamar a next() si ninguna de las condiciones anteriores se cumple
+  next();
+};

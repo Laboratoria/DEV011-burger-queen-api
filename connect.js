@@ -19,5 +19,5 @@ async function connect() {
   }
 }
 
-connect().then(res => (console.log('conected to db')))
+// connect().then(res => (console.log('conected to db')))
 module.exports = { connect };

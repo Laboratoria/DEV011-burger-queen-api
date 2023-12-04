@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const config = require('../config');
-const mongoose = require ('mongoose');
+// const mongoose = require ('mongoose');
 // const User = require('../models/users');
 const { getUsers } = require('../controller/users');
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+/* mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', () => {
     console.log('r/a-Database connected');
-});
+}); */
 
 const { secret } = config;
 
@@ -44,14 +44,14 @@ module.exports = (app, nextMain) => {
           if (result) {
             console.log('r/a-compare_result:',result);
             // si las credenciales coinciden, se genera y envia el token JWT
-            const token = jwt.sign({ uid: existingUser[0]._id, email:existingUser[0].email }, secret, { expiresIn: '4h' });
+            const token = jwt.sign({ uid: existingUser[0]._id, email:existingUser[0].email, admin:existingUser[0].roles === 'admin'}, secret, { expiresIn: '4h' });
             console.log('r/a-token:',jwt.verify(token, secret));
             // enviamos la rspuesta del token
             resp.json({ token });
           }else if (err) {
             console.log('r/a-err: ',err);
             // enviamos al respuesta 500 de error con el servidor
-            return next(500);
+            return next({ status: 500, message: 'No hay conincidencia en las credenciales'});
           }})
         } else {
           // si la contraseña es incorrecta enviamos una respuesta de status 401
@@ -62,7 +62,7 @@ module.exports = (app, nextMain) => {
       // si no se logra resolver la promesa de traer la coleción de los usuarios
       // enviamos al respuesta 500 de error con el servidor
       console.log('r/a:error 500 con el servidor')
-      return next(500);
+      return next({ status: 500, message: 'No se pudo cargar a collección de los usuarios'});
     })
 
     // next();

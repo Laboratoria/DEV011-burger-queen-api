@@ -21,7 +21,7 @@ const initAdminUser = (app, next) => {
   const adminUser = {
     email: adminEmail,
     password: bcrypt.hashSync(adminPassword, 10),
-    roles: { admin: true },
+    roles: 'admin',
   };
 
   getUsers()
@@ -118,7 +118,7 @@ module.exports = (app, next) => {
   });
 
   app.get('/users', requireAdmin, async(req, resp) => {
-    if (await requireAdmin(req)){
+    try {
     let allUsers = await getUsers();
     const respUsersGet = [];
     
@@ -130,13 +130,13 @@ module.exports = (app, next) => {
       })
     })
     resp.json(respUsersGet)
-  } else {
+  } catch(error) {
     resp.status(403).json({"error": "No tiene permiso de Administradora"});
   }
     /* next() */
   });
 
-  app.get('/users/:uid', requireAuth, async(req, resp) => {
+  app.get('/users/:uid', requireAuth, async(req, resp, next) => {
     console.log('r/u get/:uid params: ',req.params.uid);
     const uidUser = req.params.uid;
     let allUsers = await getUsers();

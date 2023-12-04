@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const usersSchema = new Schema({
   email:{type:String, unique:true},
   password:String,
-  roles:{}, // Rol asignado [ admin, waiter, chef ]
+  roles:String, // Rol asignado [ admin, waiter, chef ]
 });
 const User = mongoose.model('User', usersSchema);
 
