@@ -10,6 +10,7 @@ const {
 
 const {
   getUsers,
+  getUserbyID
 } = require('../controller/users');
 
 const initAdminUser = (app, next) => {
@@ -137,30 +138,25 @@ module.exports = (app, next) => {
   });
 
   app.get('/users/:uid', requireAuth, async(req, resp, next) => {
-    console.log('r/u get/:uid params: ',req.params.uid);
-    const uidUser = req.params.uid;
-    let allUsers = await getUsers();
-    const user = allUsers.filter((user) => (user._id.toString() === uidUser));
-    console.log('r/u get/:uid user:',user);
-    if ( user.length === 0 ){
-      resp.status(404).json({"error": "La usuaria solicitada no existe"});
-    } else if ( isAdmin(req) === true || req.uid === uidUser){
-      resp.json({
-        id:user[0]._id,
-        email:user[0].email,
-        role:user[0].roles
-      });
-    } else {
-      resp.status(403).json({"error": "No tiene permiso de Administradora"});
+    try {
+      let user = await getUserbyID(req);
+      console.log('r/u get/:uid user:',user);
+      if ( user === null){
+        resp.status(404).json({"error": "La usuaria solicitada no existe"});
+      } else if (user){
+        resp.json(user);
+      } else if (user === undefined){
+        resp.status(403).json({"error": "No tiene permiso de Administradora"});
+      }
+    } catch(error) {
+      resp.status(404).json({"error": "La usuaria solicitada no existe(2)"});
     }
-
-    /* next() */
   });
 
   app.post('/users', requireAdmin, async(req, resp, next) => {
     // TODO: Implement the route to add new users
     const newUser = req.body; // Acceder a los datos en el cuerpo de la solicitud
-    console.log('r/u post req.body: ',newUser);
+    // console.log('r/u post req.body: ',newUser);
     if (!newUser.email || !newUser.password || !newUser.roles) {
       resp.status(400).json({"error": "Falta información"});
     }
@@ -172,22 +168,22 @@ module.exports = (app, next) => {
     };
   
     getUsers()
-    .then(users => {
+    .then(async(users) => {
       // console.log('Todas las personas:', users);
       const existsUser = users.some(user =>user.email === newUserCrypted.email);
       if (!existsUser){
         const newUserDB = new User(newUserCrypted);
-        console.log('r/u post newUserDB: ',newUserDB);
+        // console.log('r/u post newUserDB: ',newUserDB);
         try{
-          newUserDB.save();
-          console.log('r/u post req.body: ',newUserDB);
-          resp.json({'id':newUserDB._id, 'email':newUserDB.email,'role':newUserDB.roles});
+          await newUserDB.save();
+          // console.log('r/u post req.body: ',newUserDB);
+          resp.json({'id':newUserDB._id.toString(), 'email':newUserDB.email,'role':newUserDB.roles});
         } catch (err){
-          console.log('r/u post error:',err);
-          resp.status(500).json({'message':'Error interno del servidor, no se pudo guardar el usuario'})
+          // console.log('r/u post error:',err);
+          next({status:500, message:'Error interno del servidor, no se pudo guardar el usuario'})
         }
       } else {
-        resp.status(403).json({"error": "Email ya registrado"});
+        next({status:403, message: "Email ya registrado"});
         //return next({status:403, message:'Email ya registrado'});
       }
     })
@@ -201,6 +197,58 @@ module.exports = (app, next) => {
   });
 
   app.put('/users/:uid', requireAuth, (req, resp, next) => {
+    const newUserData = req.body; // Acceder a los datos en el cuerpo de la 
+    console.log('r/u put newUserData:', newUserData);
+    const uidUser = req.params.uid;
+    console.log('r/u put uidUser:', uidUser.length);
+
+    if ( !isAdmin(req) && req.uid !== uidUser ){
+      next({staus:403, message:'No cuenta con permisos de Administrador'})
+    }
+    if (req.uid === uidUser && newUserData.role != undefined){
+      next({status:403, message:'No puede modificar su role'})
+    }
+    getUsers()
+    .then(async(users)=>{
+      console.log('r/u put users.includes@: ', uidUser.includes('@'));
+      if (uidUser.includes('@')){
+        try {
+          const updatedUser = await users.findOneAndUpdate(
+            { 'email': uidUser },
+            {
+              $set: {
+                'password': bcrypt.hashSync(newUserData.password, 10),
+                'roles': newUserData.role,
+              },
+            }
+          );
+          console.log('r/u put updatedUser: ', updatedUser);
+          resp.json({'id':updatedUser._id.toString(), 'email':updatedUser.email,'role':updatedUser.roles});
+        }catch(error){
+          next({status:404, message:'La ususaria solicitada no existe'})
+        }
+      } else{
+        try {
+          const updatedUser = await users.findOneAndUpdate(
+            { '_id': uidUser },
+            {
+              $set: {
+                'password': bcrypt.hashSync(newUserData.password, 10),
+                'roles': newUserData.role,
+              },
+            }
+          );
+          console.log('r/u put updatedUser: ', 'updatedUser');
+          resp.json({'id':updatedUser._id.toString(), 'email':updatedUser.email,'role':updatedUser.roles});
+        }catch(error){
+          next({status:404, message:'La ususaria solicitada no existe (2)'})
+        }
+      }
+      
+    })
+    .catch(error =>{
+      next({status:500, message:'Error interno del servidor, no se pudo actualizar la información'})
+    })
   });
 
   app.delete('/users/:uid', requireAuth, (req, resp, next) => {
