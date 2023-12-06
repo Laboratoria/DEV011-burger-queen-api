@@ -47,8 +47,8 @@ module.exports.isAdmin = (req) => (
     const allUsers = await getUsers();
     console.log('m/a-isAdmin allUsers: ', allUsers);
     const user = allUsers.filter((user) => (user._id.toString() === req.uid))
-    console.log('m/a-isAdmin: ', user && user.roles && user.roles.admin === true);
-    return (user && user.roles && user.roles.admin === true);
+    console.log('m/a-isAdmin: ', user && user.role && user.role.admin === true);
+    return (user && user.role && user.role.admin === true);
   } catch (error) {
     console.error('Error al verificar si el usuario es administrador:', error);
     throw error;
