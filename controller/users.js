@@ -1,6 +1,6 @@
-// const ObjectId = require ('mongoose').Types.ObjectId;
 const User = require('../models/users');
-const { isAdmin } = require('../middleware/auth');
+// const ObjectId = require ('mongoose').Types.ObjectId;
+//const { isAdmin } = require('../middleware/auth');
 // mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
 module.exports = {
@@ -54,7 +54,6 @@ module.exports = {
       throw error;
     }
   },
-
 
   getUserByEmail: async(email) => {
     try {

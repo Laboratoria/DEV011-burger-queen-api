@@ -169,7 +169,7 @@ module.exports = (app, next) => {
     try {
       let user = await getUserByEmail(newUser.email);
       console.log('r/u post/ user registrado:',user);
-      if ( user === null){
+      if ( user.length === 0){
         const savedUser = await saveUser(newUserCrypted)
         resp.json(savedUser);
       } else {

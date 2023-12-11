@@ -3,13 +3,26 @@ const Schema = mongoose.Schema;
 
 // ---------- Define schema a of orders ---------- //
 const ordersSchema = new Schema({
-  userId:{type:Schema.Types.ObjectId, ref:'users', required:true}, // Id
-  client:String, // Clienta para quien se creó la orden
-  products:[
+  // userId:{type:Schema.Types.ObjectId, ref:'users', required:true}, // Id
+  userId: String,
+  client: String, // Clienta para quien se creó la orden
+  products: Object/*[{
+    type:{
+      type: Object,
+      validate: {
+        validator: (objeto) =>
+          objeto &&
+          typeof objeto === "object" &&
+          "productId" in objeto,
+        message: "El objeto debe tener los atributos específicos.",
+      },
+    }
+  }]  ([
     {
       qty: Number, // Cantidad
       product: {
-        productId: {type:Schema.Types.ObjectId, ref: 'products'},
+        // productId: {type:Schema.Types.ObjectId, ref: 'products'},
+        productd: String,
         name: String,
         price: Number,
         image: String, // URL a la imagen
@@ -17,10 +30,10 @@ const ordersSchema = new Schema({
         dateEntry: String // Fecha de creación
       }
     }
-  ], // 
-  status:{type:Schema.Types.ObjectId, ref:'statuses'}, // Estado de la orden [ pending, canceled, delivering, delivered ]
-  dateEntry:Date, // Fecha de creación
-  dateProcessed:Date // Fecha de cambio de `status` a `delivered`
+  ]) */,
+  status: String, // Estado de la orden [ pending, canceled, delivering, delivered ]
+  dateEntry: Date, // Fecha de creación
+  dateProcessed: Date, // Fecha de cambio de `status` a `delivered`
 });
 const Order = mongoose.model('Order', ordersSchema);
 
