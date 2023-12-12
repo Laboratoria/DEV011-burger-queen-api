@@ -10,9 +10,9 @@ module.exports = {
       console.error('Error al buscar todas las ordenes:', error);
       throw error;
     }
-    },
-  
-    getOrderByID: async(idOrderToGet) => {
+  },
+
+  getOrderByID: async(idOrderToGet) => {
     try {
       const orderByID = await Order.findById({"_id":idOrderToGet});
       console.log('c/o getOrderByID Orden en la collección: ', orderByID);
@@ -21,14 +21,31 @@ module.exports = {
       console.error('Error al buscar orden por ID: ', error);
       throw error;
     }
-    },
-    postOrder: async(newOrderData) =>{
+  },
+  postOrder: async(newOrderData) =>{
     try {
       return await Order(newOrderData).save()
     } catch(error){
       throw error;
     }
-    },
+  },
+
+  patchOrder: async(idOrderToUpdate, newOrderToUpdate)=>{
+    try{
+      const orderToUpdate = await module.exports.getOrderByID(idOrderToUpdate);
+      console.log('c/o patchOrder: ',orderToUpdate);
+      console.log('c/o newOrderToUpdate: ',newOrderToUpdate);
+      if(orderToUpdate){
+        const maya = await Order.findByIdAndUpdate({'_id': idOrderToUpdate},newOrderToUpdate)
+        console.log('maya: ',maya);
+        return await module.exports.getOrderByID(idOrderToUpdate)
+      } else {
+        return undefined
+      }
+    }catch(error){
+      throw error;
+    }
+  },
   deleteOrder: async(idOrderToDelete) => {
     try {
       const orderToDelete = await module.exports.getOrderByID(idOrderToDelete);
