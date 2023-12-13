@@ -13,7 +13,7 @@ const Product = mongoose.model('Product', productsSchema);
 
 // mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
 
-module.esports = Product;
+module.exports = Product;
 
 // Connect to MongoDB
 

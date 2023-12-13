@@ -16,7 +16,7 @@ module.exports = (app, nextMain) => {
       const allOrders = await getOrders();
       resp.json(allOrders);
     } catch (error) {
-      resp.status(500).json({ error: error });
+      resp.status(500).json({ 'error': error });
     }
   });
 
@@ -26,11 +26,13 @@ module.exports = (app, nextMain) => {
       console.log('r/c getById idOrder: ', idOrder);
       const orderByID = await getOrderByID(idOrder);
       console.log('r/o getById orderByID: ', orderByID);
-      if (orderByID) {
+      if (orderByID === null) {
+        resp.status(404).json({ 'error': 'la orden solicitada no existe' });
+      } else {
         resp.json(orderByID);
       }
     } catch (error) {
-      resp.status(404).json({ error: 'la orden solicitada no existe' });
+      resp.status(404).json({ 'error': 'la orden solicitada no existe' });
     }
   });
 
@@ -48,9 +50,15 @@ module.exports = (app, nextMain) => {
           .json({
             error: 'Se intenta crear una orden sin productos o/y sin status',
           });
+      } else if (!newOrderData.userId) {
+        resp
+          .status(400)
+          .json({
+            error: 'Se intenta crear una orden sin userId',
+          });
       } else {
         const newOrder = await postOrder(newOrderData);
-        resp.json(newOrder);
+        resp.status(201).json(newOrder);
       }
     } catch (error) {
       console.log('r/o postOrder error: ', error);
