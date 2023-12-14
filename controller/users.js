@@ -10,7 +10,7 @@ module.exports = {
       // console.log('Usuarios de la collección: ',allUsers);
       return allUsers;
     } catch(error){
-      console.error('Error al buscar todas las personas:', error);
+      console.log('c/u Error al buscar todas las personas:', error);
       throw error;
     }
     // TODO: Implement the necessary function to fetch the `users` collection or table
@@ -31,7 +31,7 @@ module.exports = {
       })
       return respUsersGet;
     } catch(error){
-      console.error('Error al buscar todas las personas:', error);
+      console.log('Error al buscar todas las personas:', error);
       throw error;
     }
     // TODO: Implement the necessary function to fetch the `users` collection or table
@@ -50,7 +50,7 @@ module.exports = {
       }
       return userByID;
     } catch(error){
-      console.error('Error al buscar persona por ID: ', error);
+      console.log('Error al buscar persona por ID: ', error);
       throw error;
     }
   },
@@ -68,7 +68,7 @@ module.exports = {
     }
       return userByEmail;
     } catch(error){
-      console.error('Error al buscar persona por email: ', error);
+      console.log('Error al buscar persona por email: ', error);
       throw error;
     }
   },

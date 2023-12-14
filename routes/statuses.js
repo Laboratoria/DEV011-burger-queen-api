@@ -13,7 +13,7 @@ module.exports = (app, nextMain) => {
       // Renderiza la plantilla con los datos
       res.render('visualizar', { status });
     } catch (error) {
-      console.error('Error al obtener status:', error);
+      console.log('Error al obtener status:', error);
       res.status(500).send('Error interno del servidor (route/statuses)');
     }
   });

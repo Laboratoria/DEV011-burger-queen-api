@@ -38,12 +38,12 @@ const initAdminUser = (app, next) => {
       const newAdminUserDB = new User(adminUser);
       return newAdminUserDB.save();
     } else {
-    console.error(`El usuario ${adminUser.email} ya existe en la base de datos`)
+    console.log(`El usuario ${adminUser.email} ya existe en la base de datos`)
     }
   })
   .catch(error => {
     // Maneja el error si ocurrió durante la búsqueda
-    console.error('Error general:', error);
+    console.log('Error general:', error);
   })
   // .finally(() => {
     // Cierra la conexión a la base de datos después de la consulta
@@ -158,9 +158,8 @@ module.exports = (app, next) => {
     // console.log('r/u post req.body: ',newUser);
     if (!newUser.email || !newUser.password || !newUser.role) {
       resp.status(400).json({"error": "Falta información"});
-    }
-  
-    const newUserCrypted = {
+    } else {
+          const newUserCrypted = {
       email: newUser.email,
       password: bcrypt.hashSync(newUser.password, 10),
       role: newUser.role,
@@ -177,7 +176,10 @@ module.exports = (app, next) => {
       }
     }catch (error){
       resp.status(500).json({"error": 'Error interno del servidor, no se pudo guardar el usuario'})
-    }    
+    }  
+    }
+  
+  
   });
 
   app.put('/users/:uid', requireAuth, async (req, resp, next) => {

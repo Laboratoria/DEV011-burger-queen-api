@@ -7,7 +7,7 @@ module.exports = {
       // console.log('Productos de la collección: ',allOrders);
       return allProducts;
     } catch(error){
-      console.error('c/p Error al buscar todos los productos:', error);
+      // console.log('c/p Error al buscar todos los productos:', error);
       throw error;
     }
   },
@@ -15,17 +15,18 @@ module.exports = {
   getProductByID: async(idProductToGet) => {
     try {
       const productByID = await Product.findById({"_id":idProductToGet});
-      console.log('c/p getProductByID Producto en la collección: ', productByID);
+      // console.log('c/p getProductByID Producto en la collección: ', productByID);
       return productByID;
     } catch(error){
-      console.error('c/p Error al buscar producto por ID: ', error);
+      //console.log('c/p Error al buscar producto por ID: ', error);
       throw error;
     }
   },
 
   postProduct: async(newProductData) =>{
     try {
-      return await Product(newProductData).save()
+      const newProduct = new Product (newProductData)
+      return await newProduct.save()
     } catch(error){
       throw error;
     }

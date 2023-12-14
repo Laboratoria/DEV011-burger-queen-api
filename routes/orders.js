@@ -23,7 +23,7 @@ module.exports = (app, nextMain) => {
   app.get('/orders/:orderId', requireAuth, async (req, resp, next) => {
     try {
       const idOrder = req.params.orderId;
-      console.log('r/c getById idOrder: ', idOrder);
+      console.log('r/o getById idOrder: ', idOrder);
       const orderByID = await getOrderByID(idOrder);
       console.log('r/o getById orderByID: ', orderByID);
       if (orderByID === null) {
