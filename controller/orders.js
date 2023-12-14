@@ -7,7 +7,7 @@ module.exports = {
       // console.log('Ordenes de la collección: ',allOrders);
       return allOrders;
     } catch(error){
-      console.log('Error al buscar todas las ordenes:', error);
+      // console.log('Error al buscar todas las ordenes:', error);
       throw error;
     }
   },

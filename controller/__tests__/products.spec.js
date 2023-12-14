@@ -77,7 +77,7 @@ describe('getProducts', () => {
 });
 
 describe('getProductByID', () => {
-  it('Debe mandar un documento de la colección', async () => {
+  it('Debe mandar un documento de la colección de productos', async () => {
     await expect(getProductByID('321654')).resolves.toEqual(mockProductWithId)
     expect(Product.findById).toHaveBeenCalled();
   });

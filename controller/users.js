@@ -10,7 +10,7 @@ module.exports = {
       // console.log('Usuarios de la collección: ',allUsers);
       return allUsers;
     } catch(error){
-      console.log('c/u Error al buscar todas las personas:', error);
+      // console.log('c/u Error al buscar todas las personas:', error);
       throw error;
     }
     // TODO: Implement the necessary function to fetch the `users` collection or table
