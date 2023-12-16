@@ -4,11 +4,11 @@ const {
 
 const User = require('../../models/users');
 
-describe('getUsers', () => {
+/* describe('getUsers', () => {
   it('should get users collection', (done) => {
     done();
   });
-});
+}); */
 
 // Mock de la función `find` de Mongoose
 jest.mock('../../models/users', () => ({

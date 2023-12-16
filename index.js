@@ -4,14 +4,17 @@ const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('./package.json');
-const mongoose = require ('mongoose');
+require ('./connect')
+/* const mongoose = require ('mongoose');
 // const User = require('../models/users');
+// const { dbUrl } = config.dbUrl;
 
-mongoose.connect('mongodb://127.0.0.1:27017/burger-queen-api');
+console.log('dbUrl: ',dbUrl);
+mongoose.connect(dbUrl);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', () => {
     console.log('r/a-Database connected');
-});
+}); */
 
 const { port, secret } = config;
 const app = express();

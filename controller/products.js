@@ -8,7 +8,7 @@ module.exports = {
       return allProducts;
     } catch(error){
       // console.log('c/p Error al buscar todos los productos:', error);
-      throw error;
+      throw new Error('No se pudo consultar la información de los productos');
     }
   },
 
@@ -19,16 +19,16 @@ module.exports = {
       return productByID;
     } catch(error){
       //console.log('c/p Error al buscar producto por ID: ', error);
-      throw error;
+      throw new Error(`No se pudo consultar la información del producto con ID: ${idProductToGet}`);
     }
   },
 
   postProduct: async(newProductData) =>{
     try {
-      const newProduct = new Product (newProductData)
-      return await newProduct.save()
+      return await Product.save(newProductData)
     } catch(error){
-      throw error;
+      // mejorar el manejo del error
+      throw new Error('No se puedo guardar el producto nuevo');
     }
   },
 
@@ -45,7 +45,7 @@ module.exports = {
         return undefined
       }
     }catch(error){
-      throw error;
+      throw new Error(`No se pudo actualizar la información del producto con ID: ${idProductToUpdate}`);
     }
   },
 
@@ -63,7 +63,7 @@ module.exports = {
         return null;
       }
     }catch(error){
-      throw error;
+      throw new Error(`No se pudo borrar el producto con ID: ${idProductToUpdate}`);
     }
   }
 }

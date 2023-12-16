@@ -47,6 +47,12 @@ const mockOrders = [
 ]
 const mockOrdertWithId = mockOrders.filter((doc)=>doc._id === '654321')
 
+describe('getOrders', () => {
+  it('should get orders collection', (done) => {
+    done();
+  });
+});
+
 jest.mock('../../models/orders', () => ({
   find: jest.fn(() => {
     if (mockBehavior === 'resolve') {

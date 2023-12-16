@@ -39,28 +39,29 @@ const mockProduct = {
 let mockBehavior = 'resolve';
 
 // Mock de las funcionalidades de mongoose
+//mock implementation once
 jest.mock('../../models/products', () => ({
   find: jest.fn(()=>{
     if (mockBehavior === 'resolve') {
       return Promise.resolve(mockProducts);
     } else {
-      return Promise.reject(new Error('Error simulado'));
+      return Promise.reject(new Error('No se pudo consultar la información de los productos'));
     }
   }),
   findById: jest.fn(({"_id":id})=>{
     if (id === '321654') {
       return Promise.resolve(mockProductWithId);
     } else {
-      return Promise.reject(new Error(`Error simulado ${id}`));
+      return Promise.reject(new Error(`No se pudo consultar la información del producto con ID: ${id}`));
     }
   }),
-    save:jest.fn(()=>{
-      if (mockBehavior === 'resolve') {
-        return Promise.resolve({'_id':'123' ,...mockProduct});
-      } else {
-        return Promise.reject(new Error('Error simulado'))
-      }
-    })
+  save:jest.fn(()=>{
+    if (mockBehavior === 'resolve') {
+      return Promise.resolve({'_id':'123' ,...mockProduct});
+    } else {
+      return Promise.reject(new Error('No se puedo guardar el producto nuevo'))
+    }
+  })
 }));
 
 describe('getProducts', () => {
@@ -71,7 +72,7 @@ describe('getProducts', () => {
   });
   it('Debería mandar un error', async () => {
     mockBehavior = 'reject';
-    await expect(getProducts()).rejects.toThrow('Error simulado');
+    await expect(getProducts()).rejects.toThrow('No se pudo consultar la información de los productos');
     expect(Product.find).toHaveBeenCalled();
   });
 });
@@ -82,7 +83,7 @@ describe('getProductByID', () => {
     expect(Product.findById).toHaveBeenCalled();
   });
   it('Debería mandar un error', async () => {
-    await expect(getProductByID('123456')).rejects.toThrow('Error simulado');
+    await expect(getProductByID('123456')).rejects.toThrow('No se pudo consultar la información del producto con ID: 123456');
     expect(Product.findById).toHaveBeenCalled();
   });
 })
@@ -90,12 +91,12 @@ describe('getProductByID', () => {
 describe('postProduct', () => {
   it('Debe mandar el documento guardado', async () => {
     mockBehavior = 'resolve';
-    await expect(postProduct()).resolves.toEqual(mockProduct)
+    await expect(postProduct()).resolves.toEqual({'_id':'123' ,...mockProduct})
     //expect(Product.save).toHaveBeenCalled();
   });
   it('Debería mandar un error', async () => {
     mockBehavior = 'reject';
-    await expect(postProduct()).rejects.toThrow('Error simulado');
+    await expect(postProduct()).rejects.toThrow('No se puedo guardar el producto nuevo');
     //expect(Product.save).toHaveBeenCalled();
   });
 })
