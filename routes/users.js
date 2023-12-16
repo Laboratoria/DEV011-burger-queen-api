@@ -200,7 +200,7 @@ module.exports = (app, next) => {
       try{
         const updatedUser = await putUser(userIdentifier, newUserData, req);
         console.log('r/u put updatedUser: ',updatedUser);
-        if (updatedUser === null){
+        if (updatedUser === undefined){
           resp.status(404).json({"error": 'Error la usuaria solicitada no existe(3)'})
         }
         resp.json(updatedUser)
@@ -220,7 +220,7 @@ module.exports = (app, next) => {
       try{
         const deletedUser = await deleteUser(userIdentifier);
         console.log('r/u delete deletedUser: ',deletedUser);
-        if (deletedUser === null){
+        if (deletedUser === undefined){
           resp.status(404).json({"error": 'Error la usuaria solicitada no existe(4)'})
         } else {
           resp.json(deletedUser)

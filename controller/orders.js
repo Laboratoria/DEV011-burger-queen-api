@@ -24,7 +24,7 @@ module.exports = {
   },
   postOrder: async(newOrderData) =>{
     try {
-      return await Order(newOrderData).save()
+      return await Order.save(newOrderData)
     } catch(error){
       throw error;
     }
@@ -57,10 +57,10 @@ module.exports = {
         console.log('c/o deleteOrder orderDeleted: ', orderDeleted);
         return (!orderDeleted ? orderToDelete: 'Error al borrar la orden')
       }else{
-        return null;
+        return undefined;
       }
     }catch(error){
-      throw error;
+      throw new Error(`No se pudo borrar la orden con ID: ${idOrderToDelete}`);
     }
   }
 }

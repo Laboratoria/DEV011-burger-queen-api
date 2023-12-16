@@ -32,7 +32,7 @@ module.exports = {
       return respUsersGet;
     } catch(error){
       console.log('Error al buscar todas las personas:', error);
-      throw error;
+      throw new Error('Error al buscar todas las personas');
     }
     // TODO: Implement the necessary function to fetch the `users` collection or table
   },
@@ -51,7 +51,7 @@ module.exports = {
       return userByID;
     } catch(error){
       console.log('Error al buscar persona por ID: ', error);
-      throw error;
+      throw new Error(`Error al buscar persona por ID: ${idUserToGet}`);
     }
   },
 
@@ -66,17 +66,16 @@ module.exports = {
           role:userByEmail[0].role
         };
     }
-      return userByEmail;
+      return null;
     } catch(error){
       console.log('Error al buscar persona por email: ', error);
-      throw error;
+      throw new Error(`Error al buscar persona por email: ${email}`);
     }
   },
 
   saveUser: async(user) => {
     try{
-      const newUser = new User(user);
-      await newUser.save();
+      const newUser =await User.save(user);
       const savedUser = {'id':newUser._id.toString(), 'email':newUser.email,'role':newUser.role}
       return savedUser;
     } catch (error){
@@ -88,24 +87,28 @@ module.exports = {
     console.log('c/u putUser userIdentifier: ', userIdentifier);
     try{
       const userToUpdate = (userIdentifier.includes('@'))? await module.exports.getUserByEmail(userIdentifier) : await module.exports.getUserByID(userIdentifier);
-      const idUserToUpdate = userToUpdate.id
-      console.log('c/u putUser userToUpdate: ', userToUpdate);
-      await User.findOneAndUpdate(
-        { "_id": userToUpdate.id },
-        {
-          $set: {
-            "email": newUserData.email,
-            "password": newUserData.password,
-            "role": newUserData.role,
-          },
+        if(userToUpdate){
+          const idUserToUpdate = userToUpdate.id
+          console.log('c/u putUser userToUpdate: ', userToUpdate);
+          await User.findOneAndUpdate(
+            { "_id": userToUpdate.id },
+            {
+              $set: {
+                "email": newUserData.email,
+                "password": newUserData.password,
+                "role": newUserData.role,
+              },
+            }
+          );
+          const updatedUserBD = await module.exports.getUserByID(idUserToUpdate);
+          console.log('c/u putUser updatedUserBD: ', updatedUserBD);
+          return updatedUserBD;
+        } else {
+          return undefined
         }
-      );
-      const updatedUserBD = await module.exports.getUserByID(idUserToUpdate);
-      console.log('c/u putUser updatedUserBD: ', updatedUserBD);
-      return updatedUserBD;
     }catch(error){
       console.log('c/u putUser error: ', error);
-      throw error;
+      throw new Error(`Error al intentar actualizar la información del usuario: ${userIdentifier}`);
     }
   },
 
@@ -113,7 +116,7 @@ module.exports = {
     try{
       const userToDelete = (userIdentifier.includes('@'))? await module.exports.getUserByEmail(userIdentifier) : await module.exports.getUserByID(userIdentifier);
       if (userToDelete === null){
-        return null;
+        return undefined;
       } else {
         const idUserToUpdate = userToDelete.id
         console.log('c/u deleteUser userToDelete: ', userToDelete);
@@ -127,7 +130,7 @@ module.exports = {
 
     }catch(error){
       console.log('c/u putUser error: ', error);
-      throw error;
+      throw new Error(`No se pudo borrar el usuario con ID: ${userIdentifier}`);
     }
   },
 };

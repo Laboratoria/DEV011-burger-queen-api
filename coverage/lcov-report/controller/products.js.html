@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.23% </span>
+                <span class="strong">6.06% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/34</span>
+                <span class='fraction'>2/33</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/5</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.23% </span>
+                <span class="strong">6.06% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/34</span>
+                <span class='fraction'>2/33</span>
             </div>
         
             
@@ -135,33 +135,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,34 +202,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const Product = require('../models/products');
 &nbsp;
 module.exports = {
-  getProducts: async() =&gt; {
-    try {
-      const allProducts = await Product.find();
+  getProducts: <span class="fstat-no" title="function not covered" >as</span>ync() =&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const allProducts = <span class="cstat-no" title="statement not covered" >await Product.find();</span>
       // console.log('Productos de la collección: ',allOrders);
-      return allProducts;
+<span class="cstat-no" title="statement not covered" >      return allProducts;</span>
     } catch(error){
       // console.log('c/p Error al buscar todos los productos:', error);
-      throw error;
+<span class="cstat-no" title="statement not covered" >      throw new Error('No se pudo consultar la información de los productos');</span>
     }
   },
 &nbsp;
-  getProductByID: async(idProductToGet) =&gt; {
-    try {
-      const productByID = await Product.findById({"_id":idProductToGet});
+  getProductByID: <span class="fstat-no" title="function not covered" >as</span>ync(idProductToGet) =&gt; {
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const productByID = <span class="cstat-no" title="statement not covered" >await Product.findById({"_id":idProductToGet});</span>
       // console.log('c/p getProductByID Producto en la collección: ', productByID);
-      return productByID;
+<span class="cstat-no" title="statement not covered" >      return productByID;</span>
     } catch(error){
       //console.log('c/p Error al buscar producto por ID: ', error);
-      throw error;
+<span class="cstat-no" title="statement not covered" >      throw new Error(`No se pudo consultar la información del producto con ID: ${idProductToGet}`);</span>
     }
   },
 &nbsp;
-  postProduct: async(newProductData) =&gt;{
-    try {
-      const newProduct = new Product (newProductData)
-<span class="cstat-no" title="statement not covered" >      return await newProduct.save()</span>
+  postProduct: <span class="fstat-no" title="function not covered" >as</span>ync(newProductData) =&gt;{
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      return await Product.save(newProductData)</span>
     } catch(error){
-      throw error;
+      // mejorar el manejo del error
+<span class="cstat-no" title="statement not covered" >      throw new Error('No se puedo guardar el producto nuevo');</span>
     }
   },
 &nbsp;
@@ -246,25 +246,25 @@ module.exports = {
 <span class="cstat-no" title="statement not covered" >        return undefined</span>
       }
     }catch(error){
-<span class="cstat-no" title="statement not covered" >      throw error;</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(`No se pudo actualizar la información del producto con ID: ${idProductToUpdate}`);</span>
     }
   },
 &nbsp;
   deleteProduct: <span class="fstat-no" title="function not covered" >as</span>ync(idProductToDelete) =&gt; {
 <span class="cstat-no" title="statement not covered" >    try {</span>
       const productToDelete = <span class="cstat-no" title="statement not covered" >await module.exports.getProductByID(idProductToDelete);</span>
-<span class="cstat-no" title="statement not covered" >      console.log('c/o deleteProduct productToDelete: ', productToDelete);</span>
+<span class="cstat-no" title="statement not covered" >      console.log('c/p deleteProduct productToDelete: ', productToDelete);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (productToDelete){</span>
 <span class="cstat-no" title="statement not covered" >        await Product.findOneAndDelete({ "_id": idProductToDelete });</span>
         const productDeleted = <span class="cstat-no" title="statement not covered" >await module.exports.getProductByID(idProductToDelete);</span>
-<span class="cstat-no" title="statement not covered" >        console.log('c/o deleteProduct productDeleted: ', productDeleted);</span>
-<span class="cstat-no" title="statement not covered" >        return (!productDeleted ? productToDelete: undefined)</span>
+<span class="cstat-no" title="statement not covered" >        console.log('c/p deleteProduct productDeleted: ', productDeleted);</span>
+<span class="cstat-no" title="statement not covered" >        return (!productDeleted ? productToDelete: 'Error al borrar el producto')</span>
       }else{
-<span class="cstat-no" title="statement not covered" >        return null;</span>
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
       }
     }catch(error){
-<span class="cstat-no" title="statement not covered" >      throw error;</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(`No se pudo borrar el producto con ID: ${idProductToDelete}`);</span>
     }
   }
 }</pre></td></tr></table></pre>
@@ -274,7 +274,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-14T18:48:07.352Z
+                at 2023-12-16T16:26:22.152Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -52,18 +52,18 @@ module.exports = {
   deleteProduct: async(idProductToDelete) => {
     try {
       const productToDelete = await module.exports.getProductByID(idProductToDelete);
-      console.log('c/o deleteProduct productToDelete: ', productToDelete);
+      console.log('c/p deleteProduct productToDelete: ', productToDelete);
 
       if (productToDelete){
         await Product.findOneAndDelete({ "_id": idProductToDelete });
         const productDeleted = await module.exports.getProductByID(idProductToDelete);
-        console.log('c/o deleteProduct productDeleted: ', productDeleted);
-        return (!productDeleted ? productToDelete: undefined)
+        console.log('c/p deleteProduct productDeleted: ', productDeleted);
+        return (!productDeleted ? productToDelete: 'Error al borrar el producto')
       }else{
-        return null;
+        return undefined;
       }
     }catch(error){
-      throw new Error(`No se pudo borrar el producto con ID: ${idProductToUpdate}`);
+      throw new Error(`No se pudo borrar el producto con ID: ${idProductToDelete}`);
     }
   }
 }

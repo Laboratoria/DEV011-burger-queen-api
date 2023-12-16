@@ -93,8 +93,10 @@ module.exports = (app, nextMain) => {
     try {
       const deletedProduct = await deleteProduct(productId);
       console.log('r/p delete deletedProduct: ', deletedProduct);
-      if (deletedProduct === null) {
+      if (deletedProduct === undefined) {
         resp.status(404).json({ 'error': 'Error el producto solicitado no existe(4)'});
+      } else if (deleteProduct === null) {
+        resp.status(500).json({'error':'No se pudo actualizar la información'});
       } else {
         resp.json(deletedProduct);
       }
