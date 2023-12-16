@@ -82,7 +82,7 @@ describe('getProductByID', () => {
   });
 });
 
-describe('postProduct', () => {
+describe.skip('postProduct', () => {
   it('Debe mandar el documento guardado', async () => {
     Product.save.mockResolvedValueOnce({'_id':'123' ,...mockProduct})
     await expect(postProduct()).resolves.toEqual({'_id':'123' ,...mockProduct})

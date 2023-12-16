@@ -24,7 +24,7 @@ module.exports = {
   },
   postOrder: async(newOrderData) =>{
     try {
-      return await Order.save(newOrderData)
+      return await Order(newOrderData).save()
     } catch(error){
       throw error;
     }

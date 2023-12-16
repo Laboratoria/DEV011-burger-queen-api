@@ -75,7 +75,7 @@ module.exports = {
 
   saveUser: async(user) => {
     try{
-      const newUser =await User.save(user);
+      const newUser =await User(user).save();
       const savedUser = {'id':newUser._id.toString(), 'email':newUser.email,'role':newUser.role}
       return savedUser;
     } catch (error){

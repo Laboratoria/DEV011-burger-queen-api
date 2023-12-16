@@ -41,9 +41,9 @@ module.exports = (app, nextMain) => {
   app.post('/products', requireAdmin, async(req, resp, next) => {
     try {
       const newProductData = req.body;
-      console.log('r/p newProductData.userId: ', newProductData.userId); // change id to ObjetID
-      console.log('r/p newProductData.products: ', newProductData.products); // change id to ObjetID
-      console.log('r/p newProductData: ', newProductData.status); // change id to ObjetID
+      console.log('r/p newProductData.name: ', newProductData.name); // change id to ObjetID
+      console.log('r/p newProductData.price: ', newProductData.price); // change id to ObjetID
+      console.log('r/p newProductData: ', newProductData); // change id to ObjetID
       if (!newProductData.name) {
         resp
           .status(400)

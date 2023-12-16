@@ -25,7 +25,7 @@ module.exports = {
 
   postProduct: async(newProductData) =>{
     try {
-      return await Product.save(newProductData)
+      return await Product(newProductData).save()
     } catch(error){
       // mejorar el manejo del error
       throw new Error('No se puedo guardar el producto nuevo');

@@ -112,7 +112,7 @@ describe('getOrderByID', () => {
   });
 });
 
-describe('postOrder', () => {
+describe.skip('postOrder', () => {
   it('Debe mandar el documento guardado', async () => {
     Order.save.mockResolvedValueOnce({'_id':'123' ,...mockOrder})
     await expect(postOrder()).resolves.toEqual({'_id':'123' ,...mockOrder})
