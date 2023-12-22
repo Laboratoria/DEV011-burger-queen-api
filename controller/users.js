@@ -10,7 +10,7 @@ module.exports = {
       // console.log('Usuarios de la collección: ',allUsers);
       return allUsers;
     } catch(error){
-      console.log('c/u Error al buscar todas las personas:', error);
+      // console.log('c/u Error al buscar todas las personas:', error);
       throw error;
     }
     // TODO: Implement the necessary function to fetch the `users` collection or table
@@ -19,7 +19,7 @@ module.exports = {
 getUsersJSON: async (page, limit) => {
   try {
     const allUsers = await User.find().limit(limit).skip((page - 1) * limit);
-
+    console.log('1----------');
     const respUsersGet = [];
 
     allUsers.forEach((user) => {
@@ -29,10 +29,12 @@ getUsersJSON: async (page, limit) => {
         role: user.role,
       });
     });
+    console.log('2----------');
 
     const baseUrl = '/users';
     const count = await User.countDocuments();
     const totalPages = Math.ceil(count / limit);
+    console.log('3----------');
 
     const linkHeader = [
       `<${baseUrl}?page=1&limit=${limit}>; rel="first"`,
@@ -40,6 +42,7 @@ getUsersJSON: async (page, limit) => {
       page < totalPages ? `<${baseUrl}?page=${page - -1}&limit=${limit}>; rel="next"`:`<${baseUrl}?page=${page}&limit=${limit}>; rel="next"`,
       `<${baseUrl}?page=${totalPages}&limit=${limit}>; rel="last"`,
     ].join(', ');
+    console.log('4----------');
 
     return {respUsersGet,linkHeader};
   } catch (error) {
@@ -51,7 +54,7 @@ getUsersJSON: async (page, limit) => {
   getUserByID: async(idUserToGet) => {
     try {
       const userByID = await User.findById({"_id":idUserToGet});
-      console.log('c/u getUserByID Usuarios de la collección: ',userByID !== null);
+      // console.log('c/u getUserByID Usuarios de la collección: ',userByID !== null);
       if (userByID !== null){
         return {
           id:userByID._id.toString(),
@@ -61,7 +64,7 @@ getUsersJSON: async (page, limit) => {
       }
       return userByID;
     } catch(error){
-      console.log('Error al buscar persona por ID: ', error);
+      // console.log('Error al buscar persona por ID: ', error);
       throw new Error(`Error al buscar persona por ID: ${idUserToGet}`);
     }
   },
@@ -69,7 +72,7 @@ getUsersJSON: async (page, limit) => {
   getUserByEmail: async(email) => {
     try {
       const userByEmail = await User.find({"email":email});
-      console.log(`Usuarios en la collección con ${email}: `, userByEmail);
+      // console.log(`Usuarios en la collección con ${email}: `, userByEmail);
       if ( userByEmail.length > 0 ){
         return {
           id:userByEmail[0]._id.toString(),
@@ -79,7 +82,7 @@ getUsersJSON: async (page, limit) => {
     }
       return null;
     } catch(error){
-      console.log('Error al buscar persona por email: ', error);
+      // console.log('Error al buscar persona por email: ', error);
       throw new Error(`Error al buscar persona por email: ${email}`);
     }
   },
@@ -95,7 +98,7 @@ getUsersJSON: async (page, limit) => {
   },
 
   putUser: async(userIdentifier, newUserData) => {
-    console.log('c/u putUser userIdentifier: ', userIdentifier);
+    // console.log('c/u putUser userIdentifier: ', userIdentifier);
     try{
       const userToUpdate = (userIdentifier.includes('@'))? await module.exports.getUserByEmail(userIdentifier) : await module.exports.getUserByID(userIdentifier);
         if(userToUpdate){
@@ -112,13 +115,13 @@ getUsersJSON: async (page, limit) => {
             }
           );
           const updatedUserBD = await module.exports.getUserByID(idUserToUpdate);
-          console.log('c/u putUser updatedUserBD: ', updatedUserBD);
+          // console.log('c/u putUser updatedUserBD: ', updatedUserBD);
           return updatedUserBD;
         } else {
           return undefined
         }
     }catch(error){
-      console.log('c/u putUser error: ', error);
+      // console.log('c/u putUser error: ', error);
       throw new Error(`Error al intentar actualizar la información del usuario: ${userIdentifier}`);
     }
   },
@@ -130,17 +133,17 @@ getUsersJSON: async (page, limit) => {
         return undefined;
       } else {
         const idUserToUpdate = userToDelete.id
-        console.log('c/u deleteUser userToDelete: ', userToDelete);
+        // console.log('c/u deleteUser userToDelete: ', userToDelete);
         await User.findOneAndDelete(
           { "_id": userToDelete.id }
         );
         const userToDeleteBD = await module.exports.getUserByID(idUserToUpdate);
-        console.log('c/u putUser userToDeleteBD: ', userToDeleteBD);
+        // console.log('c/u putUser userToDeleteBD: ', userToDeleteBD);
         return (userToDeleteBD === null ? userToDelete:'Error al borrar a la usuaria');
       }
 
     }catch(error){
-      console.log('c/u putUser error: ', error);
+      // console.log('c/u putUser error: ', error);
       throw new Error(`No se pudo borrar el usuario con ID: ${userIdentifier}`);
     }
   },

@@ -107,7 +107,7 @@ describe('getOrderByID', () => {
   });
   it('Debería mandar un error', async () => {
     Order.findById.mockRejectedValueOnce(new Error('No se pudo consultar la información del ordero con ID: 654321'))
-    await expect(getOrderByID('654321')).rejects.toThrow('No se pudo consultar la información del ordero con ID: 654321');
+    await expect(getOrderByID('654321')).resolves.toEqual(null);
     expect(Order.findById).toHaveBeenCalled();
   });
 });

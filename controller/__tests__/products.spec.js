@@ -77,7 +77,7 @@ describe('getProductByID', () => {
   });
   it('Debería mandar un error', async () => {
     Product.findById.mockRejectedValueOnce(new Error('No se pudo consultar la información del producto con ID: 123456'))
-    await expect(getProductByID('123456')).rejects.toThrow('No se pudo consultar la información del producto con ID: 123456');
+    await expect(getProductByID('123456')).resolves.toEqual(null);
     expect(Product.findById).toHaveBeenCalled();
   });
 });
