@@ -18,8 +18,9 @@ module.exports = {
       // console.log('c/p getProductByID Producto en la collección: ', productByID);
       return productByID;
     } catch(error){
-      //console.log('c/p Error al buscar producto por ID: ', error);
-      throw new Error(`No se pudo consultar la información del producto con ID: ${idProductToGet}`);
+      // console.log('c/p Error al buscar producto por ID: ', error);
+      // throw new Error(`No se pudo consultar la información del producto con ID: ${idProductToGet}`);
+      return null;
     }
   },
 
@@ -33,13 +34,14 @@ module.exports = {
   },
 
   patchProduct: async(idProductToUpdate, newProductToUpdate)=>{
+    const productToUpdate = await module.exports.getProductByID(idProductToUpdate);
+    // console.log('c/p patchProduct: ',productToUpdate);
+    // console.log('c/p newProductToUpdate: ',newProductToUpdate);
     try{
-      const productToUpdate = await module.exports.getProductByID(idProductToUpdate);
-      console.log('c/p patchProduct: ',productToUpdate);
-      console.log('c/p newProductToUpdate: ',newProductToUpdate);
       if(productToUpdate){
+        // console.log('maya: ');
         const maya = await Product.findByIdAndUpdate({'_id': idProductToUpdate},newProductToUpdate)
-        console.log('maya: ',maya);
+        // console.log('maya: ',maya);
         return await module.exports.getProductByID(idProductToUpdate)
       } else {
         return undefined
@@ -52,7 +54,7 @@ module.exports = {
   deleteProduct: async(idProductToDelete) => {
     try {
       const productToDelete = await module.exports.getProductByID(idProductToDelete);
-      console.log('c/p deleteProduct productToDelete: ', productToDelete);
+      // Temp coment console.log('c/p deleteProduct productToDelete: ', productToDelete);
 
       if (productToDelete){
         await Product.findOneAndDelete({ "_id": idProductToDelete });

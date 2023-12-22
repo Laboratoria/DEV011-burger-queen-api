@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.42% </span>
+                <span class="strong">89.28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/35</span>
+                <span class='fraction'>25/28</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.42% </span>
+                <span class="strong">89.28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/35</span>
+                <span class='fraction'>25/28</span>
             </div>
         
             
@@ -145,10 +145,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,28 +163,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -210,10 +210,10 @@ module.exports = {
   getOrderByID: async(idOrderToGet) =&gt; {
     try {
       const orderByID = await Order.findById({"_id":idOrderToGet});
-      console.log('c/o getOrderByID Orden en la collección: ', orderByID);
+      // Temp coment console.log('c/o getOrderByID Orden en la collección: ', orderByID);
       return orderByID;
     } catch(error){
-      console.log('Error al buscar orden por ID: ', error);
+      // Temp coment console.log('Error al buscar orden por ID: ', error);
       throw error;
     }
   },
@@ -228,11 +228,11 @@ module.exports = {
   patchOrder: async(idOrderToUpdate, newOrderToUpdate)=&gt;{
     try{
       const orderToUpdate = await module.exports.getOrderByID(idOrderToUpdate);
-      console.log('c/o patchOrder: ',orderToUpdate);
-      console.log('c/o newOrderToUpdate: ',newOrderToUpdate);
+      // Temp coment console.log('c/o patchOrder: ',orderToUpdate);
+      // Temp coment console.log('c/o newOrderToUpdate: ',newOrderToUpdate);
       if(orderToUpdate){
         const maya = await Order.findByIdAndUpdate({'_id': idOrderToUpdate},newOrderToUpdate)
-        console.log('maya: ',maya);
+        // Temp coment console.log('maya: ',maya);
         return await module.exports.getOrderByID(idOrderToUpdate)
       } else {
         return undefined
@@ -244,12 +244,12 @@ module.exports = {
   deleteOrder: async(idOrderToDelete) =&gt; {
     try {
       const orderToDelete = await module.exports.getOrderByID(idOrderToDelete);
-      console.log('c/o deleteOrder orderToDelete: ', orderToDelete);
+      // Temp coment console.log('c/o deleteOrder orderToDelete: ', orderToDelete);
 &nbsp;
       if (orderToDelete){
         await Order.findOneAndDelete({ "_id": idOrderToDelete });
         const orderDeleted = await module.exports.getOrderByID(idOrderToDelete);
-        console.log('c/o deleteOrder orderDeleted: ', orderDeleted);
+        // Temp coment console.log('c/o deleteOrder orderDeleted: ', orderDeleted);
         return (!orderDeleted ? orderToDelete: 'Error al borrar la orden')
       }else{
         return undefined;
@@ -265,7 +265,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-12-16T18:11:35.639Z
+                at 2023-12-20T14:19:40.725Z
             </div>
         <script src="prettify.js"></script>
         <script>

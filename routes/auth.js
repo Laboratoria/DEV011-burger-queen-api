@@ -54,13 +54,13 @@ module.exports = (app, nextMain) => {
                   secret,
                   { expiresIn: "4h" }
                 );
-                console.log("r/a-token:", jwt.verify(token, secret));
-                // enviamos la rspuesta del token
+                console.log("r/a-token:", token);
+                // enviamos la respuesta del token
                 resp.json({ token });
               } else {
                 // enviamos al respuesta 500 de error con el servidor
                 return next({
-                  status: 401,
+                  status: 404,
                   message: "No hay conincidencia en las credenciales",
                 });
               }
@@ -68,13 +68,13 @@ module.exports = (app, nextMain) => {
             .catch((err) => {
               console.log("r/a-err: ", err);
               return next({
-                status: 500,
+                status: 555,
                 message: "No hay conincidencia en las credenciales",
               });
             });
         } else {
           // si la contraseña es incorrecta enviamos una respuesta de status 401
-          return next(401);
+          return next(404);
         }
       })
       .catch((error) => {

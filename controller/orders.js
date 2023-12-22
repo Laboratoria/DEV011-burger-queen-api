@@ -15,15 +15,16 @@ module.exports = {
   getOrderByID: async(idOrderToGet) => {
     try {
       const orderByID = await Order.findById({"_id":idOrderToGet});
-      console.log('c/o getOrderByID Orden en la collección: ', orderByID);
+      // Temp coment console.log('c/o getOrderByID Orden en la collección: ', orderByID);
       return orderByID;
     } catch(error){
-      console.log('Error al buscar orden por ID: ', error);
-      throw error;
+      // Temp coment console.log('Error al buscar orden por ID: ', error);
+      return null;
     }
   },
   postOrder: async(newOrderData) =>{
     try {
+      newOrderData.dateEntry = Date.now()
       return await Order(newOrderData).save()
     } catch(error){
       throw error;
@@ -33,11 +34,12 @@ module.exports = {
   patchOrder: async(idOrderToUpdate, newOrderToUpdate)=>{
     try{
       const orderToUpdate = await module.exports.getOrderByID(idOrderToUpdate);
-      console.log('c/o patchOrder: ',orderToUpdate);
-      console.log('c/o newOrderToUpdate: ',newOrderToUpdate);
+      // Temp coment console.log('c/o patchOrder: ',orderToUpdate);
+      // Temp coment console.log('c/o newOrderToUpdate: ',newOrderToUpdate);
       if(orderToUpdate){
+        newOrderToUpdate.dateProcessed = Date.now();
         const maya = await Order.findByIdAndUpdate({'_id': idOrderToUpdate},newOrderToUpdate)
-        console.log('maya: ',maya);
+        // Temp coment console.log('maya: ',maya);
         return await module.exports.getOrderByID(idOrderToUpdate)
       } else {
         return undefined
@@ -49,12 +51,12 @@ module.exports = {
   deleteOrder: async(idOrderToDelete) => {
     try {
       const orderToDelete = await module.exports.getOrderByID(idOrderToDelete);
-      console.log('c/o deleteOrder orderToDelete: ', orderToDelete);
+      // Temp coment console.log('c/o deleteOrder orderToDelete: ', orderToDelete);
 
       if (orderToDelete){
         await Order.findOneAndDelete({ "_id": idOrderToDelete });
         const orderDeleted = await module.exports.getOrderByID(idOrderToDelete);
-        console.log('c/o deleteOrder orderDeleted: ', orderDeleted);
+        // Temp coment console.log('c/o deleteOrder orderDeleted: ', orderDeleted);
         return (!orderDeleted ? orderToDelete: 'Error al borrar la orden')
       }else{
         return undefined;

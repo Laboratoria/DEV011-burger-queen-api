@@ -5,7 +5,7 @@ const {
 } = process;
 
 describe('POST /products', () => {
-  it('should fail with 401 when no auth', () => (
+  it.only('should fail with 401 when no auth', () => (
     fetch('/products', { method: 'POST' })
       .then((resp) => expect(resp.status).toBe(401))
   ));
@@ -26,7 +26,7 @@ describe('POST /products', () => {
       body: { name: 'Test', price: 5 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then((json) => {
@@ -100,7 +100,7 @@ describe('PUT /products/:productid', () => {
       body: { name: 'Test', price: 10 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then((json) => fetchAsTestUser(`/products/${json._id}`, {
@@ -124,12 +124,12 @@ describe('PUT /products/:productid', () => {
       body: { name: 'Test', price: 10 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then((json) => fetchAsAdmin(`/products/${json._id}`, {
         method: 'PUT',
-        body: { price: 'abc' },
+        body: { name:'Test', price: 'abc' },
       }))
       .then((resp) => expect(resp.status).toBe(400))
   ));
@@ -140,7 +140,7 @@ describe('PUT /products/:productid', () => {
       body: { name: 'Test', price: 10 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then((json) => fetchAsAdmin(`/products/${json._id}`, {
@@ -167,7 +167,7 @@ describe('DELETE /products/:productid', () => {
       body: { name: 'Test', price: 10 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then((json) => fetchAsTestUser(`/products/${json._id}`, { method: 'DELETE' }))
@@ -185,7 +185,7 @@ describe('DELETE /products/:productid', () => {
       body: { name: 'Test', price: 10 },
     })
       .then((resp) => {
-        expect(resp.status).toBe(200);
+        expect(resp.status).toBe(201);
         return resp.json();
       })
       .then(

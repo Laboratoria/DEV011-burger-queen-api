@@ -61,7 +61,7 @@ module.exports = {
       console.log(`Usuarios en la collección con ${email}: `, userByEmail);
       if ( userByEmail.length > 0 ){
         return {
-          id:userByEmail[0]._id,
+          id:userByEmail[0]._id.toString(),
           email:userByEmail[0].email,
           role:userByEmail[0].role
         };

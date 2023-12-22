@@ -5,13 +5,13 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (secret) => (req, resp, next) => {
   const { authorization } = req.headers;
-  console.log ('m/a-authorization: ', authorization);
+  // Temp coment console.log ('m/a-authorization: ', authorization);
   if (!authorization) {
     return next();
   }
 
   const [type, token] = authorization.split(' ');
-  console.log('m/a-type:',type);
+  // Temp coment console.log ('m/a-type:',type);
   // Instead of the server doing work to validate ``basic`` auth credentials,
   // a server using ``bearer`` tokens needs to do work to validate the token
   if (type.toLowerCase() !== 'bearer') {
@@ -20,11 +20,11 @@ module.exports = (secret) => (req, resp, next) => {
 
   jwt.verify(token, secret, (err, decodedToken) => {
     if (err) {
-      console.log('m/a-verifiTokenError:', err);
+      // Temp coment console.log ('m/a-verifiTokenError:', err);
       return next({ status: 403, message: 'Token inválido' });
     }
-    console.log('m/a-decodedToken:',decodedToken);
-    console.log('m/a-decodedToken.iud:',decodedToken.uid);
+    // Temp coment console.log ('m/a-decodedToken:',decodedToken);
+    // Temp coment console.log ('m/a-decodedToken.iud:',decodedToken.uid);
 
     req.uid = decodedToken.uid;
     req.admin = decodedToken.admin === undefined ? false:decodedToken.admin;
@@ -45,9 +45,9 @@ module.exports.isAdmin = (req) => (
   !!req.admin
   /* try {
     const allUsers = await getUsers();
-    console.log('m/a-isAdmin allUsers: ', allUsers);
+    // Temp coment console.log ('m/a-isAdmin allUsers: ', allUsers);
     const user = allUsers.filter((user) => (user._id.toString() === req.uid))
-    console.log('m/a-isAdmin: ', user && user.role && user.role.admin === true);
+    // Temp coment console.log ('m/a-isAdmin: ', user && user.role && user.role.admin === true);
     return (user && user.role && user.role.admin === true);
   } catch (error) {
     console.error('Error al verificar si el usuario es administrador:', error);
@@ -58,7 +58,7 @@ module.exports.isAdmin = (req) => (
 
 module.exports.requireAuth = (req, resp, next) => {
   const isNotAuth = !module.exports.isAuthenticated(req);
-  console.log('m/a-requireAdmin: ',!isNotAuth);
+  // Temp coment console.log ('m/a-requireAdmin: ',!isNotAuth);
   if (isNotAuth){
     resp.status(401).json({"error": "isAuthenticated(1):false"})
   } else {
@@ -71,7 +71,7 @@ module.exports.requireAdmin = (req, resp, next) => {
   const isNotAuth = !module.exports.isAuthenticated(req);
   const isNotAdmin = !module.exports.isAdmin(req);
 
-  console.log('m/a-requireAdmin: ', !isNotAuth, !isNotAdmin);
+  // Temp coment console.log ('m/a-requireAdmin: ', !isNotAuth, !isNotAdmin);
 
   if (isNotAuth) {
     return resp.status(401).json({ "error": "isAuthenticated(2):false" });
