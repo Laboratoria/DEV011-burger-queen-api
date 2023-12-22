@@ -5,7 +5,7 @@ const {
 } = process;
 
 describe('POST /products', () => {
-  it.only('should fail with 401 when no auth', () => (
+  it('should fail with 401 when no auth', () => (
     fetch('/products', { method: 'POST' })
       .then((resp) => expect(resp.status).toBe(401))
   ));

@@ -16,7 +16,7 @@ const parseLinkHeader = (str) => str.split(',')
   }, {});
 
 describe('GET /users', () => {
-  it.only('should fail with 401 when no auth', () => (
+  it('should fail with 401 when no auth', () => (
     fetch('/users').then((resp) => expect(resp.status).toBe(401))
   ));
 
@@ -42,6 +42,7 @@ describe('GET /users', () => {
     fetchAsAdmin('/users?limit=1')
       .then((resp) => {
         expect(resp.status).toBe(200);
+        console.log('////////-----',resp.headers);
         return resp.json().then((json) => ({ headers: resp.headers, json }));
       })
       .then(({ headers, json }) => {
@@ -51,6 +52,7 @@ describe('GET /users', () => {
         const lastUrlObj = url.parse(linkHeader.last);
         const nextQuery = qs.parse(nextUrlObj.query);
         const lastQuery = qs.parse(lastUrlObj.query);
+        console.log('///---///++++',nextUrlObj.path);
 
         expect(nextQuery.limit).toBe('1');
         expect(nextQuery.page).toBe('2');
@@ -59,9 +61,9 @@ describe('GET /users', () => {
 
         expect(Array.isArray(json)).toBe(true);
         expect(json.length).toBe(1);
-        expect(json[0]).toHaveProperty('_id');
+        expect(json[0]).toHaveProperty('id');
         expect(json[0]).toHaveProperty('email');
-        return fetchAsAdmin(nextUrlObj.path);
+        return fetchAsAdmin(`/users?${nextUrlObj.path}`);
       })
       .then((resp) => {
         expect(resp.status).toBe(200);
@@ -69,13 +71,14 @@ describe('GET /users', () => {
       })
       .then(({ headers, json }) => {
         const linkHeader = parseLinkHeader(headers.get('link'));
-
+        
         const firstUrlObj = url.parse(linkHeader.first);
         const prevUrlObj = url.parse(linkHeader.prev);
-
+        
         const firstQuery = qs.parse(firstUrlObj.query);
         const prevQuery = qs.parse(prevUrlObj.query);
-
+        console.log('////////-----****',prevQuery);
+        
         expect(firstQuery.limit).toBe('1');
         expect(firstQuery.page).toBe('1');
         expect(prevQuery.limit).toBe('1');
@@ -83,7 +86,7 @@ describe('GET /users', () => {
 
         expect(Array.isArray(json)).toBe(true);
         expect(json.length).toBe(1);
-        expect(json[0]).toHaveProperty('_id');
+        expect(json[0]).toHaveProperty('id');
         expect(json[0]).toHaveProperty('email');
       })
   ));

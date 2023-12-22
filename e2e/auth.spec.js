@@ -32,22 +32,19 @@ describe('POST /login', () => {
       .then((resp) => expect(resp.status).toBe(404))
   ));
 
-  it.only('should create new auth token and allow access using it', () => (
+  it('should create new auth token and allow access using it', () => (
     fetch('/login', {
       method: 'POST',
       body: { email: config.adminEmail, password: config.adminPassword },
     })
       .then((resp) => {
-        console.log('/////////',resp);
+        // console.log('/////////',resp);
         expect(resp.status).toBe(200);
         return resp.json();
       })
-      .then(({ accessToken }) => {
-        console.log({accessToken});
-        fetchWithAuth(accessToken)(`/users/${config.adminEmail}`, { method: 'GET' })
-      })
+      .then(({ token }) => fetchWithAuth(token)(`/users/${config.adminEmail}`, { method: 'GET' }))
       .then((resp) => {
-        console.log('/////-----////',resp);
+        // console.log('/////-----////',resp);
         expect(resp.status).toBe(200);
         return resp.json();
       })

@@ -14,15 +14,15 @@ mongoose.connection.once('open', () => {
 const { secret } = config;
 
 module.exports = (app, nextMain) => {
-  console.log("r/a-async app");
+  //console.log("r/a-async app");
 
   app.post("/login", (req, resp, next) => {
-    console.log("r/a-async app.post");
+    //console.log("r/a-async app.post");
 
     const { email, password } = req.body;
 
     if (!email || !password) {
-      console.log("400");
+      //console.log("400");
       return next(400);
     }
 
@@ -34,7 +34,7 @@ module.exports = (app, nextMain) => {
     getUsers()
       .then((users) => {
         // Extraemos el posible usuario existente
-        console.log("r/a-users auth:", users);
+        //console.log("r/a-users auth:", users);
         const existingUser = users.filter((user) => user.email === email);
         // Validamos que la contraseña hasheada sea la misma que la guardada
         if (existingUser.length != 0) {
@@ -43,7 +43,7 @@ module.exports = (app, nextMain) => {
             .compare(password, existingUser[0].password)
             .then((result) => {
               if (result) {
-                console.log("r/a-compare_result:", result);
+                //console.log("r/a-compare_result:", result);
                 // si las credenciales coinciden, se genera y envia el token JWT
                 const token = jwt.sign(
                   {
@@ -66,7 +66,7 @@ module.exports = (app, nextMain) => {
               }
             })
             .catch((err) => {
-              console.log("r/a-err: ", err);
+              //console.log("r/a-err: ", err);
               return next({
                 status: 555,
                 message: "No hay conincidencia en las credenciales",
@@ -80,7 +80,7 @@ module.exports = (app, nextMain) => {
       .catch((error) => {
         // si no se logra resolver la promesa de traer la coleción de los usuarios
         // enviamos al respuesta 500 de error con el servidor
-        console.log("r/a:error 500 con el servidor");
+        //console.log("r/a:error 500 con el servidor");
         return next({
           status: 500,
           message: "No se pudo cargar a collección de los usuarios",

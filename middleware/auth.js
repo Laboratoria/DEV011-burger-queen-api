@@ -20,17 +20,17 @@ module.exports = (secret) => (req, resp, next) => {
 
   jwt.verify(token, secret, (err, decodedToken) => {
     if (err) {
-      // Temp coment console.log ('m/a-verifiTokenError:', err);
+      console.log ('m/a-verifiTokenError:', err);
       return next({ status: 403, message: 'Token inválido' });
     }
-    // Temp coment console.log ('m/a-decodedToken:',decodedToken);
+    //console.log ('m/a-decodedToken:',decodedToken);
     // Temp coment console.log ('m/a-decodedToken.iud:',decodedToken.uid);
 
     req.uid = decodedToken.uid;
     req.admin = decodedToken.admin === undefined ? false:decodedToken.admin;
 
-    console.log ('m/a-req.uid: ', req.uid);
-    console.log ('m/a-req.admin: ', req.admin);
+    // console.log ('m/a-req.uid: ', req.uid);
+    // console.log ('m/a-req.admin: ', req.admin);
     next()
     // TODO: Verify user identity using `decodeToken.uid`
   });

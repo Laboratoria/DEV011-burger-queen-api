@@ -124,11 +124,13 @@ module.exports = (app, next) => {
   }); */
 
   app.get('/users', requireAdmin, async(req, resp) => {
-    // const limit = req.query.limit;
-    // const page = req.query.page;
     try {
-      let allUsers = await getUsersJSON();
-      resp.json(allUsers)
+      const limit = req.query.limit || 10;
+      const page = req.query.page || 1;
+      let allUsers = await getUsersJSON(page,limit);
+    
+      resp.set('Link', allUsers.linkHeader);
+      resp.json(allUsers.respUsersGet)
     } catch(error) {
       resp.status(403).json({"error": "No tiene permiso de Administradora"});
     }

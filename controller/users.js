@@ -16,26 +16,37 @@ module.exports = {
     // TODO: Implement the necessary function to fetch the `users` collection or table
   },
 
-  getUsersJSON: async() => {
-    try {
-      const allUsers = await User.find();
-      // console.log('Usuarios de la collección: ',allUsers);
-      const respUsersGet = [];
-    
-      allUsers.map((user)=>{
-        respUsersGet.push({
-          id:user._id,
-          email:user.email,
-          role:user.role
-        })
-      })
-      return respUsersGet;
-    } catch(error){
-      console.log('Error al buscar todas las personas:', error);
-      throw new Error('Error al buscar todas las personas');
-    }
-    // TODO: Implement the necessary function to fetch the `users` collection or table
-  },
+getUsersJSON: async (page, limit) => {
+  try {
+    const allUsers = await User.find().limit(limit).skip((page - 1) * limit);
+
+    const respUsersGet = [];
+
+    allUsers.forEach((user) => {
+      respUsersGet.push({
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      });
+    });
+
+    const baseUrl = '/users';
+    const count = await User.countDocuments();
+    const totalPages = Math.ceil(count / limit);
+
+    const linkHeader = [
+      `<${baseUrl}?page=1&limit=${limit}>; rel="first"`,
+      page > 1 ? `<${baseUrl}?page=${page - 1}&limit=${limit}; rel="prev"` : `<${baseUrl}?page=${page}&limit=${limit}>; rel="prev"`,
+      page < totalPages ? `<${baseUrl}?page=${page - -1}&limit=${limit}>; rel="next"`:`<${baseUrl}?page=${page}&limit=${limit}>; rel="next"`,
+      `<${baseUrl}?page=${totalPages}&limit=${limit}>; rel="last"`,
+    ].join(', ');
+
+    return {respUsersGet,linkHeader};
+  } catch (error) {
+    console.log('Error al buscar todas las personas:', error);
+    throw new Error('Error al buscar todas las personas');
+  }
+},
 
   getUserByID: async(idUserToGet) => {
     try {
